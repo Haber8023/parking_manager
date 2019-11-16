@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzx.Dao.RecordMapper">
+
+	<!-- 添加驶出时间 -->
+	<update id="set_record_out">
+		update parking_record
+		set
+		record_time_out=now()
+		where
+		record_id = #{record_id} and record_time_out
+		is null
+	</update>
+
+	<!-- 重置驶出时间 -->
+	<update id="reset_record_out">
+		update parking_record
+		set
+		record_time_out=null
+		where
+		record_id = #{record_id}
+	</update>
+
+	<!-- 确认驶出时间 -->
+	<update id="set_record_out_success">
+		update parking_record
+		set
+		record_time_out=#{record_time_out}
+		where
+		record_id = #{record_id}
+	</update>
+
+	<!-- 根据车位ID获取记录ID -->
+	<select id="get_record_id" resultType="String">
+		select record_id
+		from
+		parking_record
+		where
+		space_id = #{space_id} and record_time_out is null
+	</select>
+
+	<!-- 根据记录ID获取驶入时间 -->
+	<select id="get_record_time_in" resultType="String">
+		select record_time_in
+		from
+		parking_record
+		where
+		record_id = #{record_id}
+	</select>
+
+	<!-- 根据记录ID获取驶出时间 -->
+	<select id="get_record_time_out" resultType="String">
+		select
+		record_time_out
+		from
+		parking_record
+		where
+		record_id = #{record_id}
+	</select>
+
+	<!-- 根据record获取space_id -->
+	<select id="get_space_id_from_record" resultType="String">
+		select
+		space_id
+		from
+		parking_record
+		where
+		record_id = #{record_id}
+	</select>
+
+	<resultMap type="com.zzx.Model.Record" id="Record">
+		<id property="record_id" column="record_id" />
+		<result property="lot_id" column="lot_id" />
+		<result property="lot_name" column="lot_name" />
+		<result property="space_id" column="space_id" />
+		<result property="pay_bonus" column="pay_bonus" />
+		<result property="record_time_in" column="record_time_in" />
+		<result property="record_time_out" column="record_time_out" />
+	</resultMap>
+	<select id="get_all_record" resultMap="Record">
+		select *
+		from
+		valid_record
+	order by record_id
+		DESC
+	</select>
+
+	<select id="get_today_bonus" resultType="String">
+		select ifnull(bonus,0)
+		from
+		today_bonus
+	</select>
+
+	<select id="get_month_bonus" resultType="String">
+		select ifnull(bonus,0)
+		from
+		month_bonus
+	</select>
+
+	<select id="get_year_bonus" resultType="String">
+		select ifnull(bonus,0)
+		from
+		year_bonus
+	</select>
+
+	<resultMap type="com.zzx.Model.WeekBonus" id="WeekBonus">
+		<id property="bonus" column="bonus" />
+		<result property="date" column="date" />
+	</resultMap>
+	<select id="get_week_bonus" resultMap="WeekBonus">
+		select *
+		from
+		week_bonus
+	</select>
+
+
+</mapper>

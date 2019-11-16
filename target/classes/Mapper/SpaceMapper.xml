@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzx.Dao.SpaceMapper">
+
+	<!-- 获取全部车位信息 -->
+	<resultMap type="com.zzx.Model.Space" id="Space">
+		<id property="space_id" column="space_id" />
+		<result property="space_status" column="space_status" />
+	</resultMap>
+	<select id="get_all" resultMap="Space">
+		select space_id,space_status
+		from
+		parking_space
+		where lot_id = #{lot_id}
+	</select>
+	
+	<!-- 获取车位所在停车场 -->
+	<select id="get_lot_id_from_space" resultType="String">
+		select lot_id
+		from parking_space
+		where space_id = #{space_id}
+	</select>
+
+	<!-- 更新车位信息 -->
+	<update id="update_space" parameterType="com.zzx.Model.Space">
+		update parking_space
+		set
+		space_status=#{space_status}
+		where
+		space_id = #{space_id}
+	</update>
+
+	<!-- 删除车位信息 -->
+	<delete id="delete_space_record">
+		delete from parking_record where space_id =
+		#{space_id_delete}
+	</delete>
+	<delete id="delete_space">
+		delete from parking_space where space_id =
+		#{space_id_delete}
+	</delete>
+
+	<!-- 插入车位信息 -->
+	<insert id="insert_space">
+		insert into
+		parking_space(lot_id, space_status)
+		values(#{lot_id_insert},#{space_status})
+	</insert>
+
+	<!-- 将所有车位置为空闲 -->
+	<update id="open_all">
+		update parking_space
+		set
+		space_status=0
+		where
+		lot_id = #{lot_id}
+	</update>
+	
+	<!-- 将所有车位置为维护 -->
+	<update id="close_all">
+		update parking_space
+		set
+		space_status=2
+		where
+		lot_id = #{lot_id}
+	</update>
+
+    <!-- 车位是否存在 -->
+	<select id="get_space_count" resultType="int">
+		select count(*)
+		from parking_space
+		where space_id = #{space_id}
+	</select>
+
+    <!-- 获取车位状态 -->
+	<select id="get_space_status" resultType="String">
+		select space_status
+		from parking_space
+		where space_id = #{space_id}
+	</select>
+</mapper>

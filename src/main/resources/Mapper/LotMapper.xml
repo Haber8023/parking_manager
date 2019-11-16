@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzx.Dao.LotMapper">
+
+	<!-- 获取全部停车场信息 -->
+	<resultMap type="com.zzx.Model.Lot" id="Lot">
+		<id property="lot_id" column="lot_id" />
+		<result property="lot_price" column="lot_price" />
+		<result property="lot_status" column="lot_status" />
+		<result property="lot_name" column="lot_name" />
+		<result property="lot_free_start" column="lot_free_start" />
+		<result property="lot_free_end" column="lot_free_end" />
+	</resultMap>
+	<select id="get_all" resultMap="Lot">
+		select *
+		from parking_lot
+	</select>
+
+	<!-- 插入新停车场信息 -->
+	<insert id="insert_lot" parameterType="com.zzx.Model.Lot">
+		insert into
+		parking_lot(lot_price, lot_status, lot_name, lot_free_start,
+		lot_free_end)
+		values(#{lot_price}, #{lot_status}, #{lot_name},
+		#{lot_free_start}, #{lot_free_end})
+	</insert>
+
+	<!-- 更新停车场信息 -->
+	<update id="update_lot" parameterType="com.zzx.Model.Lot">
+		update parking_lot
+		set
+		lot_price=#{lot_price},
+		lot_status=#{lot_status},
+		lot_name=#{lot_name},
+		lot_free_start=#{lot_free_start},
+		lot_free_end=#{lot_free_end}
+		where
+		lot_id = #{lot_id}
+	</update>
+	
+    <!-- 获取停车场状态 -->
+	<select id="get_status" parameterType="com.zzx.Model.Lot"
+		resultType="String">
+		select lot_status
+		from parking_lot
+		where
+		lot_id = #{lot_id}
+	</select>
+
+	<!-- 根据停车场ID获取停车场名字 -->
+	<select id="get_lot_name" resultType="String">
+		select lot_name
+		from
+		parking_lot
+		where
+		lot_id = #{lot_id}
+	</select>
+
+	<!-- 获取免费时段开始时间 -->
+	<select id="get_free_start" resultType="String">
+		select lot_free_start
+		from parking_lot
+		where lot_id = #{lot_id}
+	</select>
+
+	<!-- 获取免费时段结束时间 -->
+	<select id="get_free_end" resultType="String">
+		select lot_free_end
+		from parking_lot
+		where lot_id = #{lot_id}
+	</select>
+	
+	<!-- 获取停车场单价 -->
+	<select id="get_price" resultType="double">
+		select lot_price
+		from parking_lot
+		where lot_id = #{lot_id}
+	</select>
+
+</mapper>

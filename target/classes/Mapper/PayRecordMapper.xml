@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzx.Dao.PayRecordMapper">
+
+	<!-- 获取全部收入记录 -->
+	<resultMap type="com.zzx.Model.PayRecord" id="PayRecord">
+		<id property="record_id" column="record_id" />
+		<result property="pay_bonus" column="pay_bonus" />
+	</resultMap>
+	<select id="get_all_record" resultMap="PayRecord">
+		select *
+		from
+		pay_record
+
+	</select>
+    
+	<insert id="insert_pay_record"
+		parameterType="com.zzx.Model.PayRecord">
+		insert into
+		pay_record(record_id, pay_bonus)
+		values(#{record_id}, #{pay_bonus})
+	</insert>
+
+
+
+</mapper>
